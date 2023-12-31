@@ -77,7 +77,7 @@ class Application(tk.Tk):
         self.th2 = -10.0
         self.w2 = 0.0
         state = np.radians([self.th1, self.w1, self.th2, self.w2])
-        self.dt = 0.03
+        self.dt = 0.05
         self.t = np.arange(0.0, 20, self.dt)
         self.sol = odeint(self.derivs, state, self.t)
         print(self.sol)
@@ -143,8 +143,8 @@ class Application(tk.Tk):
                 interval = 25,
                 blit = True,
                 )
-        self.ani.save("sample4.gif", writer = "imagemagick")
         self.canvas.draw()
+        # self.ani.save("sample4.gif", writer = "imagemagick")
 
 
 
