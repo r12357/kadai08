@@ -1,0 +1,9 @@
+state[0]はth1
+state[1]はomega1
+state[2]はth2
+state[3]はomega2
+
+
+
+
+ごはんですよ

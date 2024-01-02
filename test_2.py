@@ -141,6 +141,6 @@ def animate(i):
 ani = animation.FuncAnimation(fig, animate, range(1, len(y)),
                               interval=dt*1000, blit=True, init_func=init)
 
-ani.save("sample5.gif", writer = "imagemagick")
+# ani.save("sample5.gif", writer = "imagemagick")
 
 plt.show()

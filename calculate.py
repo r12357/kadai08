@@ -26,6 +26,40 @@ B = sympy.Matrix([
 
 C = A.det()*A.inv()*B*M
 
+def pendulum(m1, m2, l1, l2, th1, th2, omega1, omega2):
+    g = 9.8
+    A1 = np.array([
+        [(m1 + m2) * l1, m2 * l2 * np.cos(th1 - th2)],
+        [m2 * l1 * np.cos(th1 - th2), m2 * l2]
+        ])
+
+    B1 = np.array([
+        [(m1 + m2) * g * np.sin(th1), m2 * l2 * omega2 ** 2 * np.sin(th1 - th2)],
+        [m2 * l1 * omega1 ** 2 * np.sin(th2 - th1), m2 * g * np.sin(th2)]
+        ])
+    
+
+def double_pendulum(m1, m2, m3, l1, l2, l3, th1, omega1, th2, omega2, th3, omega3):
+    A = np.array([
+        [(m1 + m2 + m3) * l1, (m2 + m3) * l2 * np.cos(th1 - th2), m3 * l3 * np.cos(th1 - th2)],
+        [(m2 + m3) * l1 * np.cos(th2 - th1), (m2 + m3) * l2, m3 * l3 * np.cos(th2 - th1)]
+        [m3 * l1 * np.cos(th3 - th1), m3 * l2 * np.cos(th2 - th3), m3 * l3]
+        ])
+    
+    B = np.array([
+        [(m1 + m2 + m3) * g * np.sin(th1), (m2 + m3) * l2 * omega2 ** 2 * np.sin(th1 - th2), m3 * l3 * omega3 ** 2 * np.sin(th1 - th3)],
+        [(m2 + m3) * l1 * omega1 ** 2 * np.sin(th2 - th1), (m2 + m3) * g * np.sin(th2), m3 * l3 * omega3 ** 2 * np.sin(th2 - th3)],
+        [m3 * l1 * omega1 **2 * np.sin(th3 - th1), m3 * l2 * omega2 ** 2 * np.sin(th3 - th2), m3 * g * np.sin(th3)]
+        ])
+    
+    M = np.array([
+        [-1],
+        [-1],
+        [-1]
+        ])
+
+    return np.linalg.inv(A) @ B @ M
+
 print(sympy.simplify(A.det()))
 
 
