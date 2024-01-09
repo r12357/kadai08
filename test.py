@@ -4,8 +4,12 @@ import matplotlib.pyplot as plt
 import scipy.integrate as integrate
 import matplotlib.animation as animation
 
+from numba import jit
+
+
+
 g = 9.8  
-n = 32
+n = 64
 m = np.full(n, 1.0)
 l = np.full(n, 1.0)
 state = np.zeros(2 * n)
@@ -16,27 +20,31 @@ for i in range(2 * n):
         state[i] = 0
 state = np.radians(state)
 
-def pendulum(m, l, state):
-    n = len(m)
-    A = np.zeros((n, n))
-    B = np.zeros((n,n))
-    E = np.ones(n)
-    
-    for i in range(n):
-        for j in range(n):
-            for k in range(max(i,j),n):
-                A[i][j] += m[k]
-                B[i][j] += m[k]
-            if i == j:
-                A[i][j] *= l[j]
-                B[i][j] *= g * np.sin(state[2 * i])
-            else:
-                A[i][j] *= l[j] * np.cos(state[2 * i] - state[2 * j])
-                B[i][j] *= l[j] * state[2 * j + 1] ** 2 * np.sin(state[2 * i] - state[2 * j])
-    
-    return -np.linalg.inv(A) @ B @ E
 
+
+
+@jit
 def derivs(state, t):
+
+    def pendulum(m, l, state):
+        n = len(m)
+        A = np.zeros((n, n))
+        B = np.zeros((n,n))
+        E = np.ones(n)
+        
+        for i in range(n):
+            for j in range(n):
+                for k in range(max(i,j),n):
+                    A[i][j] += m[k]
+                    B[i][j] += m[k]
+                if i == j:
+                    A[i][j] *= l[j]
+                    B[i][j] *= g * np.sin(state[2 * i])
+                else:
+                    A[i][j] *= l[j] * np.cos(state[2 * i] - state[2 * j])
+                    B[i][j] *= l[j] * state[2 * j + 1] ** 2 * np.sin(state[2 * i] - state[2 * j])
+        
+        return -np.linalg.inv(A) @ B @ E
 
     dydx = np.zeros_like(state)
     P = pendulum(m, l, state)
@@ -108,4 +116,7 @@ def animate(i):
 
 ani = animation.FuncAnimation(fig, animate, range(1, len(Y)),
                               interval=dt*1000, blit=True, init_func=init)
+
+# ani.save("sample6.gif", writer = "imagemagick")
+
 plt.show()
